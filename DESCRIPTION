@@ -1,0 +1,14 @@
+Package: bbhidistill
+Title: Distill Template for BHHI
+Version: 0.0.1
+Authors@R: 
+    person(given = "Eve",
+           family = "Perry",
+           role = c("aut", "cre"),
+           email = "eve.perry@ucsf.edu")
+Description: Distill Template for BHHI
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
