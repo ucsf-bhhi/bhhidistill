@@ -64,3 +64,56 @@ create_bhhi_site = function(dir, title, gh_pages = TRUE, open = TRUE) {
     usethis::proj_activate(dir)
   }
 }
+
+#' Create a Distill themed RMarkdown analysis
+#'
+#' @param title Title of the analysis.
+#' @param ... Arguments passed to [distill::create_post()].
+#' @param open Open the post in an editor after creating it.
+#'
+#' @export
+create_analysis = function(title, ..., open = interactive()) {
+  initial_post = distill::create_post(title, collection = "analyses", edit = FALSE, ...)
+
+  yaml = readLines(initial_post, n = 12)
+
+  con <- file(initial_post, open = "w")
+
+  on.exit(close(con), add = TRUE)
+
+  body <-
+"
+```{r setup, include=FALSE}
+# set default chunk options
+knitr::opts_chunk$set(
+  # don't show code
+  echo = FALSE,
+  # don't show warnings
+  warning = FALSE,
+  # don't show messages
+  message = FALSE,
+  # use the ragg package to render figures
+  dev = 'ragg_png',
+  # set default dpi for hi-res screens
+  dpi = 144
+)
+
+# set default ggplot theme
+ggplot2::theme_set(
+  ggplot2::theme_minimal(base_family = 'Lato') +
+    ggplot2::theme(
+      # disable in between gridlines
+      panel.grid.minor = ggplot2::element_blank(),
+      # set color of gridlines
+      panel.grid.major = ggplot2::element_line(color = 'grey90')
+    )
+)
+```
+
+
+`r bhhidistill::add_version()`
+"
+
+  writeLines(yaml, con)
+  writeLines(body, con)
+}
