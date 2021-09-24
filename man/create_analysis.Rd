@@ -4,12 +4,15 @@
 \alias{create_analysis}
 \title{Create a Distill themed RMarkdown analysis}
 \usage{
-create_analysis(title, ..., open = interactive())
+create_analysis(title, ..., date_prefix = NULL, open = interactive())
 }
 \arguments{
 \item{title}{Title of the analysis.}
 
 \item{...}{Arguments passed to \code{\link[distill:create_post]{distill::create_post()}}.}
+
+\item{date_prefix}{Date prefix for post slug (preserves chronological order
+for posts within the filesystem). Defaults to NULL for no date prefix.}
 
 \item{open}{Open the post in an editor after creating it.}
 }

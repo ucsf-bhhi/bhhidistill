@@ -69,11 +69,13 @@ create_bhhi_site = function(dir, title, gh_pages = TRUE, open = TRUE) {
 #'
 #' @param title Title of the analysis.
 #' @param ... Arguments passed to [distill::create_post()].
+#' @param date_prefix Date prefix for post slug (preserves chronological order
+#' for posts within the filesystem). Defaults to NULL for no date prefix.
 #' @param open Open the post in an editor after creating it.
 #'
 #' @export
-create_analysis = function(title, ..., open = interactive()) {
-  initial_post = distill::create_post(title, collection = "analyses", edit = FALSE, ...)
+create_analysis = function(title, ..., date_prefix = NULL, open = interactive()) {
+  initial_post = distill::create_post(title, collection = "analyses", date_prefix = date_prefix, edit = FALSE, ...)
 
   yaml = readLines(initial_post, n = 12)
 
