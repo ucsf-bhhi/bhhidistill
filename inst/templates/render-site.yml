@@ -1,0 +1,40 @@
+on:
+  push:
+    branches: main
+
+name: Render & Deploy Site
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    env:
+      DEPLOY_BRANCH: gh-pages
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: r-lib/actions/setup-r@v1
+
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Install dependencies
+        run: |
+          install.packages("remotes")
+          remotes::install_github("ucsf-bhhi/bhhidistill")
+        shell: Rscript {0}
+
+      - name: Render Rmarkdown files
+        run: |
+          RMD_PATH=$(git diff --name-only $(git rev-parse origin/${{ env.DEPLOY_BRANCH }}) '*.Rmd')
+          Rscript -e 'for (f in commandArgs(TRUE)) if (file.exists(f)) rmarkdown::render(f)' ${RMD_PATH[*]}
+
+      - name: Render Site
+        run: Rscript -e 'rmarkdown::render_site(encoding = "UTF-8")'
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: ${{ env.DEPLOY_BRANCH }} # The branch the action should deploy to.
+          folder: . # The folder the action should deploy.

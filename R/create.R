@@ -3,10 +3,11 @@
 #' @param dir Path to the directory holding the site
 #' @param title Title of the site
 #' @param gh_pages Will the site be hosted on GitHub pages
+#' @param gh_action Include GitHub action that automatically renders new and updated pages.
 #' @param open Open a new RStudio session in the site directory
 #'
 #' @export
-create_bhhi_site = function(dir, title, gh_pages = TRUE, open = TRUE) {
+create_bhhi_site = function(dir, title, gh_pages = TRUE, gh_action = TRUE, open = TRUE) {
   # create the distill site
   distill::create_blog(dir, title, gh_pages, edit = FALSE)
 
@@ -59,6 +60,24 @@ create_bhhi_site = function(dir, title, gh_pages = TRUE, open = TRUE) {
 
   # re-render the site
   rmarkdown::render_site(dir)
+
+  # setup github actions
+  if (gh_action) {
+    actions_directory = file.path(dir, ".github", "workflows")
+    # if the actions directory doesn't exist, create it
+    if (!dir.exists(actions_directory)) dir.create(actions_directory, recursive = TRUE)
+    # copy the actions script
+    file.copy(
+      system.file("templates", "render-site.yml", package = "bhhidistill"),
+      actions_directory
+    )
+
+    # add docs/ to .gitignore since we're rendering on GitHub
+    # create .gitignore if it doesn't exist
+    if (!file.exists(file.path(dir, ".gitignore"))) file.create(file.path(dir, ".gitignore"))
+    # add docs/
+    cat("docs/", file = file.path(dir, ".gitignore"), append = TRUE)
+  }
 
   if (open && dir != ".") {
     usethis::proj_activate(dir)
