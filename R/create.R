@@ -38,6 +38,9 @@ create_bhhi_site = function(dir, title,
   # add the analyses collection
   site_yaml$collections$analyses$categories = TRUE
 
+  # create the analyses directory if it doesn't exist
+  if (!dir.exists(file.path(dir, "_analyses"))) dir.create(file.path(dir, "_analyses"))
+
   # read in index.Rmd
   index_yaml <- readLines(file.path(dir, "index.Rmd"), n = 5)
   # delete existing index.Rmd
