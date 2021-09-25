@@ -5,8 +5,8 @@
 #' @return "Commit: <last commit SHA>"
 #' @export
 add_version = function() {
-  if (git2r::in_repository()) {
-    if (length(git2r::remotes()) > 0) {
+  if (uses_git()) {
+    if (nrow(gert::git_remote_list()) > 0) {
       commit_string = commit_link()
     } else {
       commit_string = commit_id()
@@ -23,7 +23,7 @@ commit_link = function() {
 }
 
 commit_id = function() {
-  substr(git2r::last_commit()[["sha"]], 1, 7)
+  substr(gert::git_commit_id(), 1, 7)
 }
 
 commit_url = function() {
@@ -32,7 +32,7 @@ commit_url = function() {
 
 repo_url = function() {
   {
-    remote_url = git2r::remote_url()
+    remote_url = gert::git_remote_info()$url
     if (substr(remote_url, 1, 4) == "http") return(substr(remote_url, 1, nchar(remote_url) - 4))
 
     if (substr(remote_url, 1, 3) == "git") {
@@ -48,3 +48,11 @@ file_path = function() {
   gsub(project_root, "", abs_path)
 }
 
+# from usethis
+uses_git <- function() {
+  repo <- tryCatch(
+    gert::git_find(),
+    error = function(e) NULL
+  )
+  !is.null(repo)
+}

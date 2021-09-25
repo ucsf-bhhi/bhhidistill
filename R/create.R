@@ -96,9 +96,9 @@ create_bhhi_site = function(dir, title,
 
     usethis::use_github_pages(branch = "gh-pages", path = "/docs")
 
-    git2r::add(dir, "*")
-    git2r::commit(dir, "setup GitHub pages")
-    git2r::push(dir)
+    gert::git_add(".", repo = dir)
+    gert::git_commit("setup GitHub pages", repo = dir)
+    gert::git_push(repo = dir)
   }
 
   if (open && dir != ".") {

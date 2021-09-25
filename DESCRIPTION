@@ -13,13 +13,13 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports:
-  distill,
-  ggplot2,
-  git2r,
-  knitr,
-  purrr,
-  rmarkdown,
-  rprojroot,
-  thematic,
-  usethis,
-  yaml
+    distill,
+    gert,
+    ggplot2,
+    knitr,
+    purrr,
+    rmarkdown,
+    rprojroot,
+    thematic,
+    usethis,
+    yaml
