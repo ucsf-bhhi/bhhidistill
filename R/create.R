@@ -7,9 +7,18 @@
 #' @param open Open a new RStudio session in the site directory
 #'
 #' @export
-create_bhhi_site = function(dir, title, gh_pages = TRUE, gh_action = TRUE, open = TRUE) {
+create_bhhi_site = function(dir, title,
+                            gh_pages = TRUE,
+                            setup_github = TRUE,
+                            github_organization = "ucsf-bhhi",
+                            private_github = FALSE,
+                            github_host = NULL,
+                            gh_action = TRUE,
+                            open = TRUE) {
   # create the distill site
   distill::create_blog(dir, title, gh_pages, edit = FALSE)
+
+  usethis::proj_set(dir)
 
   # remove posts
   unlink(file.path(dir, "_posts"), recursive = TRUE)
@@ -61,6 +70,13 @@ create_bhhi_site = function(dir, title, gh_pages = TRUE, gh_action = TRUE, open 
   # re-render the site
   rmarkdown::render_site(dir)
 
+  if (setup_github) {
+    if (gh_action) cat("docs/", file = file.path(dir, ".gitignore"))
+    if (!(dir.exists(file.path(dir, ".git")))) usethis::use_git()
+
+    usethis::use_github(github_organization, private_github, host = github_host)
+  }
+
   # setup github actions
   if (gh_action) {
     actions_directory = file.path(dir, ".github", "workflows")
@@ -77,10 +93,18 @@ create_bhhi_site = function(dir, title, gh_pages = TRUE, gh_action = TRUE, open 
     if (!file.exists(file.path(dir, ".gitignore"))) file.create(file.path(dir, ".gitignore"))
     # add docs/
     cat("docs/", file = file.path(dir, ".gitignore"), append = TRUE)
+
+    usethis::use_github_pages(branch = "gh-pages", path = "/docs")
+
+    git2r::add(dir, "*")
+    git2r::commit(dir, "setup GitHub pages")
+    git2r::push(dir)
   }
 
   if (open && dir != ".") {
     usethis::proj_activate(dir)
+  } else {
+    usethis::proj_set(".")
   }
 }
 
