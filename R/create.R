@@ -96,6 +96,9 @@ create_bhhi_site = function(dir, title,
     if (!file.exists(file.path(dir, ".gitignore"))) file.create(file.path(dir, ".gitignore"))
     # add docs/
     cat("docs/", file = file.path(dir, ".gitignore"), append = TRUE)
+    cat("_analyses/**/*.html", file = file.path(dir, ".gitignore"), append = TRUE)
+    cat("_analyses/**/*_files/", file = file.path(dir, ".gitignore"), append = TRUE)
+
 
     usethis::use_github_pages(branch = "gh-pages", path = "/docs")
 
