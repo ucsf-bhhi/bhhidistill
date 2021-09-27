@@ -149,9 +149,9 @@ knitr::opts_chunk$set(
 # figures will use colors from document theme
 thematic::thematic_rmd(
   font = 'Lato',
-  fg = #000000,
-  bg = #ffffff,
-  accent = #058488,
+  fg = '#000000',
+  bg = '#ffffff',
+  accent = '#058488',
   sequential = thematic::sequential_gradient(fg_weight = 0, bg_weight = 1, fg_low = FALSE),
   qualitative = c('#058488', '#052049', '#6EA400', '#007CBE', '#F26D04', '#EB093C')
 )
