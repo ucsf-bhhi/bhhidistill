@@ -1,6 +1,6 @@
 Package: bhhidistill
 Title: Distill Template for BHHI
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person(given = "Eve",
            family = "Perry",
