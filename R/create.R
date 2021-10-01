@@ -123,8 +123,8 @@ create_bhhi_site = function(dir, title,
 #' @param open Open the post in an editor after creating it.
 #'
 #' @export
-create_analysis = function(title, ..., date_prefix = NULL, open = interactive()) {
-  initial_post = distill::create_post(title, collection = "analyses", date_prefix = date_prefix, edit = FALSE, ...)
+create_analysis = function(title, ..., collection = "analyses", date_prefix = NULL, open = interactive()) {
+  initial_post = distill::create_post(title, collection = collection, date_prefix = date_prefix, edit = FALSE, ...)
 
   yaml = readLines(initial_post, n = 12)
 
