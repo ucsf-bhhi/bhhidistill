@@ -8,6 +8,7 @@ jobs:
   build:
     runs-on: macOS-latest
     env:
+      RENV_CACHE: ~/Library/Caches/org.R-project.R/R/renv
       DEPLOY_BRANCH: gh-pages
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -19,10 +20,19 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      - name: Restore R package cache
+        uses: pat-s/always-upload-cache@v2
+        with:
+          path: ${{ env.RENV_LIBRARY }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
       - name: Install dependencies
         run: |
-          install.packages("remotes")
-          remotes::install_github("ucsf-bhhi/bhhidistill")
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+          renv::diagnostics()
         shell: Rscript {0}
 
       - name: Render Rmarkdown files
@@ -32,6 +42,9 @@ jobs:
 
       - name: Render Site
         run: Rscript -e 'rmarkdown::render_site(encoding = "UTF-8")'
+
+      - name: Unignore /docs
+        run: sed -i -e "/docs/d" .gitignore
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.5
