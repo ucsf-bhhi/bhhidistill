@@ -180,4 +180,68 @@ ggplot2::theme_set(
 
   if (open) file.edit(article_path)
 }
+
+create_article = function(title, create_dir = FALSE, edit = TRUE) {
+  distill::create_article(title, create_dir = create_dir, edit = FALSE)
+
+  article_name = fs::path_ext_remove(title)
+  if (create_dir) {
+    article_path = fs::path(article_name, article_name, ext = "Rmd")
+  } else {
+    article_path = fs::path(article_name, ext = "Rmd")
+  }
+
+  yaml = readLines(article_path, n = 12)
+
+  con <- file(article_path, open = "w")
+
+  on.exit(close(con), add = TRUE)
+
+  body <-
+    "
+```{r setup, include=FALSE}
+# set default chunk options
+knitr::opts_chunk$set(
+  # don't show code
+  echo = FALSE,
+  # don't show warnings
+  warning = FALSE,
+  # don't show messages
+  message = FALSE,
+  # use the ragg package to render figures
+  dev = 'ragg_png',
+  # set default dpi for hi-res screens
+  dpi = 144
+)
+
+# figures will use colors from document theme
+thematic::thematic_rmd(
+  font = 'Lato',
+  fg = '#000000',
+  bg = '#ffffff',
+  accent = '#058488',
+  sequential = thematic::sequential_gradient(fg_weight = 0, bg_weight = 1, fg_low = FALSE),
+  qualitative = c('#058488', '#052049', '#6EA400', '#007CBE', '#F26D04', '#EB093C')
+)
+
+# set default ggplot theme
+ggplot2::theme_set(
+  ggplot2::theme_minimal(base_family = 'Lato') +
+    ggplot2::theme(
+      # disable in between gridlines
+      panel.grid.minor = ggplot2::element_blank(),
+      # set color of gridlines
+      panel.grid.major = ggplot2::element_line(color = 'grey90')
+    )
+)
+```
+
+
+`r bhhidistill::add_version()`
+"
+
+  writeLines(yaml, con)
+  writeLines(body, con)
+
+  if (edit) file.edit(article_path)
 }
