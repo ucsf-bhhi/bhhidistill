@@ -4,7 +4,13 @@
 \alias{create_analysis}
 \title{Create a Distill themed RMarkdown analysis}
 \usage{
-create_analysis(title, ..., date_prefix = NULL, open = interactive())
+create_analysis(
+  title,
+  ...,
+  collection = "analyses",
+  date_prefix = NULL,
+  open = interactive()
+)
 }
 \arguments{
 \item{title}{Title of the analysis.}

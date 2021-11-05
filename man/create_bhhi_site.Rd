@@ -4,7 +4,17 @@
 \alias{create_bhhi_site}
 \title{Create BHHI project site}
 \usage{
-create_bhhi_site(dir, title, gh_pages = TRUE, open = TRUE)
+create_bhhi_site(
+  dir,
+  title,
+  gh_pages = TRUE,
+  setup_github = TRUE,
+  github_organization = "ucsf-bhhi",
+  private_github = FALSE,
+  github_host = NULL,
+  gh_action = TRUE,
+  open = TRUE
+)
 }
 \arguments{
 \item{dir}{Path to the directory holding the site}
@@ -12,6 +22,8 @@ create_bhhi_site(dir, title, gh_pages = TRUE, open = TRUE)
 \item{title}{Title of the site}
 
 \item{gh_pages}{Will the site be hosted on GitHub pages}
+
+\item{gh_action}{Include GitHub action that automatically renders new and updated pages.}
 
 \item{open}{Open a new RStudio session in the site directory}
 }
