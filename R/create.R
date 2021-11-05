@@ -181,6 +181,13 @@ ggplot2::theme_set(
   if (open) file.edit(article_path)
 }
 
+#' Create a new article
+#'
+#' Create (and optionally edit) a new distill article.
+#'
+#' @param title File name for the article
+#' @param create_dir TRUE to create a new directory for the document (defaults to FALSE).
+#' @param edit TRUE to edit the template immediately
 create_article = function(title, create_dir = FALSE, edit = TRUE) {
   distill::create_article(title, create_dir = create_dir, edit = FALSE)
 
