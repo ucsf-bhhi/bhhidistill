@@ -188,6 +188,7 @@ ggplot2::theme_set(
 #' @param title File name for the article
 #' @param create_dir TRUE to create a new directory for the document (defaults to FALSE).
 #' @param edit TRUE to edit the template immediately
+#' @export
 create_article = function(title, create_dir = FALSE, edit = TRUE) {
   distill::create_article(title, create_dir = create_dir, edit = FALSE)
 
