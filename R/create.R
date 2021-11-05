@@ -177,4 +177,7 @@ ggplot2::theme_set(
 
   writeLines(yaml, con)
   writeLines(body, con)
+
+  if (open) file.edit(article_path)
+}
 }
